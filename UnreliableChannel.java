@@ -71,6 +71,8 @@ public class UnreliableChannel {
             // split the string to get the client info
             String[] clientInfo = str.split(" ");
             String client = clientInfo[0];
+            String destination = clientInfo[1];
+            String message = clientInfo[2];
 
             Random rnd = new Random();
             double r = rnd.nextDouble();
