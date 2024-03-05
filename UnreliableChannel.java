@@ -16,7 +16,6 @@ public class UnreliableChannel {
         this.B = B;
     }
 
-
     // Path: Client.java <-- Hania
     class Client {
 
@@ -36,13 +35,34 @@ public class UnreliableChannel {
         private double totalDelayA = 0;
         private double totalDelayB = 0;
 
-
         public Server(double p, double minDelay, double maxDelay) {
             this.p = p;
             this.minDelay = minDelay;
             this.maxDelay = maxDelay;
         }
 
-        
+        public void listen(int port){
+            try {
+                DatagramSocket ds = new DatagramSocket(port);
+                System.out.println("Server is listening on port " + port);
+
+                while (true) {
+                    byte[] recieve = new byte[65535];
+                    // creating a packet to recieve the data and storing it in recieve
+                    DatagramPacket dpr = new DatagramPacket(recieve, recieve.length);
+                    ds.receive(dpr);
+
+                    // process the packet to determine if it should be dropped or delayed
+                    processPacket(dpr);
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void processPacket (DatagramPacket dpr){
+            
+        }
     }
 }
