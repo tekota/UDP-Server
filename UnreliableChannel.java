@@ -24,7 +24,7 @@ public class UnreliableChannel {
     // Path: Server.java
     class Server {
 
-        private double p;
+        private double p; // probability of packet loss
         private double minDelay, maxDelay;
 
         private int packetsRecievedA = 0;
@@ -37,6 +37,7 @@ public class UnreliableChannel {
         private double totalDelayA = 0;
         private double totalDelayB = 0;
 
+        // constructor
         public Server(double p, double minDelay, double maxDelay) {
             this.p = p;
             this.minDelay = minDelay;
@@ -59,7 +60,7 @@ public class UnreliableChannel {
 
                 }
             } catch (IOException e) {
-                System.out.println("Error in the server.");
+                System.out.println("Error in communicatin with server.");
                 e.printStackTrace();
             }
         }
