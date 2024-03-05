@@ -74,6 +74,13 @@ public class UnreliableChannel {
             String destination = clientInfo[1];
             String message = clientInfo[2];
 
+            // increment the number of packets recieved by the client
+            if (client.equals("A")) {
+                packetsRecievedA++;
+            } else {
+                packetsRecievedB++;
+            }
+
             Random rnd = new Random();
             double r = rnd.nextDouble();
 
@@ -101,7 +108,6 @@ public class UnreliableChannel {
 
                 // send the packet to the client
                 if (client.equals("A")) {
-                    packetsRecievedA++; // increment the number of packets recieved by A
                     packetDelayedA++; // increment the number of packets delayed by A
                     totalDelayA += delay; // add the delay to the total delay of A
                 } else {
@@ -109,10 +115,16 @@ public class UnreliableChannel {
                     packetDelayedB++; // increment the number of packets delayed by B
                     totalDelayB += delay; // add the delay to the total delay of B
                 }
-
-                
-
             }
+        }
+
+        public void getStats() {
+            System.out.println("Packets recieved from A: " + packetsRecievedA + " | " + "Lost: " + packetsDroppedA
+                    + " | " + "Delayed: " + packetDelayedA);
+            System.out.println("Packets recieved from B: " + packetsRecievedB + " | " + "Lost: " + packetsDroppedB
+                    + " | " + "Delayed: " + packetDelayedB);
+            System.out.println("Average delay from A to B: " + totalDelayA / packetDelayedA + " ms.");
+            System.out.println("Average delay from B to A: " + totalDelayB / packetDelayedB + " ms.");
         }
     }
 }
