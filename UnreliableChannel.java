@@ -59,6 +59,7 @@ public class UnreliableChannel {
 
                 }
             } catch (IOException e) {
+                System.out.println("Error in the server.");
                 e.printStackTrace();
             }
         }
@@ -103,6 +104,7 @@ public class UnreliableChannel {
                 try {
                     Thread.sleep(delay);
                 } catch (InterruptedException e) {
+                    System.out.println("The server was interrupted and could not delay the packet.");
                     e.printStackTrace();
                 }
 
@@ -115,6 +117,8 @@ public class UnreliableChannel {
                     packetDelayedB++; // increment the number of packets delayed by B
                     totalDelayB += delay; // add the delay to the total delay of B
                 }
+
+                System.out.println("The packet from client " + client + " was delayed by " + delay + " ms: "); // to be removed later
             }
         }
 
