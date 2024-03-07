@@ -119,7 +119,7 @@ public class UnreliableChannel {
                     totalDelayB += delay; // add the delay to the total delay of B
                 }
 
-                System.out.println("The packet from client " + client + " was delayed by " + delay + " ms: "); // to be removed later
+                System.out.println("The packet from client " + client + " was delayed by " + delay + " ms."); // to be removed later
             }
         }
 
