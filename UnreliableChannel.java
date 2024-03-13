@@ -83,7 +83,7 @@ class Server {
     public int port;
 
     private int packetsRecievedA = 0;
-    private int packetsRecievedB = -2;
+    private int packetsRecievedB = 0;
     private int packetsDroppedA = 0;
     private int packetsDroppedB = 0;
     private int packetDelayedA = 0;
