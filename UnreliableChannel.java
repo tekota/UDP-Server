@@ -39,8 +39,8 @@ class Client {
     }
 
     private void sendPacket(String message) throws IOException {
-        if (!(message.equals("END"))) {
-            String packetData = name + " " + (this.name.equals("A") ? "B" : "A") + " " + packetCount;
+        if (!message.equals("END")) {
+            String packetData = name + " " + (this.name.equals("A") ? "B" : "A") + " " + (packetCount%2 == 0 ? "0" : "1");
             byte[] buffer = packetData.getBytes();
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length, serverAddress, serverPort);
             socket.send(packet);
