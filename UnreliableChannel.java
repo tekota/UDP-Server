@@ -40,11 +40,17 @@ class Client {
     }
 
     private void sendPacket(String message) throws IOException {
-        String packetData = name + " " + (this.name.equals("A") ? "B" : "A") + " " + packetCount;
-        byte[] buffer = packetData.getBytes();
-        DatagramPacket packet = new DatagramPacket(buffer, buffer.length, serverAddress, serverPort);
-        socket.send(packet);
-        packetCount++;
+        if (message.equals("Data")) {
+            String packetData = name + " " + (this.name.equals("A") ? "B" : "A") + " " + packetCount;
+            byte[] buffer = packetData.getBytes();
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length, serverAddress, serverPort);
+            socket.send(packet);
+            packetCount++;
+        } else {
+            byte[] buffer = message.getBytes();
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length, serverAddress, serverPort);
+            socket.send(packet);
+        }
     }
 
     private void receivePacket() throws IOException {
@@ -76,8 +82,8 @@ class Server {
     private double minDelay, maxDelay;
     public int port;
 
-    private int packetsRecievedA = 0;
-    private int packetsRecievedB = 0;
+    private int packetsRecievedA = -1;
+    private int packetsRecievedB = -1;
     private int packetsDroppedA = 0;
     private int packetsDroppedB = 0;
     private int packetDelayedA = 0;
@@ -146,8 +152,7 @@ class Server {
             } else if (client.equals("B")) {
                 packetsDroppedB++;
             }
-            // System.out.println("The packet from client " + client + " was dropped");// to
-            // be removed later
+            // System.out.println("The packet from client " + client + " was dropped");
         } else {
             // if the random number is greater than p, the packet is delayed by a random
             // amount of time between mindDelay and maxDelay
@@ -171,9 +176,7 @@ class Server {
             }
 
             // System.out.println("The packet from client " + client + " was delayed by " +
-            // delay + " ms."); // to be
-            // removed
-            // later
+            // delay + " ms.");
         }
         try {
             String destinationClient = (client.equals("A") ? "B" : "A");
