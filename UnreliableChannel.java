@@ -194,6 +194,7 @@ class Server {
 
     }
 
+    // function to print the statistics of the server
     public void getStats() {
         System.out.println("Packets recieved from A: " + packetsRecievedA + " | " + "Lost: " + packetsDroppedA
                 + " | " + "Delayed: " + packetDelayedA);
