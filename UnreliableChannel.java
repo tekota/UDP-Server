@@ -19,11 +19,10 @@ public class UnreliableChannel {
 
         A.run(1000);
         B.run(1000);
-        server.getStats();
     }
 }
 
-// Path: Client.java <-- Hania
+// Path: Client.java
 class Client {
     public String name;
     public DatagramSocket socket;
@@ -82,8 +81,8 @@ class Server {
     private double minDelay, maxDelay;
     public int port;
 
-    private int packetsRecievedA = -1;
-    private int packetsRecievedB = -1;
+    private int packetsRecievedA = 0;
+    private int packetsRecievedB = -2;
     private int packetsDroppedA = 0;
     private int packetsDroppedB = 0;
     private int packetDelayedA = 0;
@@ -103,6 +102,7 @@ class Server {
         this.port = port;
     }
 
+    // function to listen for packets from the clients
     public void listen() {
         try (DatagramSocket ds = new DatagramSocket(port)) {
             System.out.println("Server is listening on port " + port);
@@ -153,6 +153,8 @@ class Server {
                 packetsDroppedB++;
             }
             // System.out.println("The packet from client " + client + " was dropped");
+
+            // if the random number is greater than p, the packet is delayed
         } else {
             // if the random number is greater than p, the packet is delayed by a random
             // amount of time between mindDelay and maxDelay
@@ -189,10 +191,10 @@ class Server {
     }
 
     public void getStats() {
-        System.out.println("Packets recieved from A: " + (packetsRecievedA - 1) + " | " + "Lost: " + packetsDroppedA
+        System.out.println("Packets recieved from A: " + packetsRecievedA + " | " + "Lost: " + packetsDroppedA
                 + " | " + "Delayed: " + (packetDelayedA - 1));
         System.out
-                .println("Packets recieved from B: " + (packetsRecievedB - 1) + " | " + "Lost: " + (packetsDroppedB - 1)
+                .println("Packets recieved from B: " + packetsRecievedB + " | " + "Lost: " + (packetsDroppedB)
                         + " | " + "Delayed: " + packetDelayedB);
         System.out
                 .println("Average delay from A to B: " + String.format("%.2f", totalDelayA / packetDelayedA) + " ms.");
