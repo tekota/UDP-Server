@@ -62,11 +62,10 @@ class Client {
         while (packetCount < n) {
             sendPacket("Data");
             receivePacket();
-            // Thread.sleep(500);
         }
 
         sendPacket("END");
-       // System.out.println(this.name + ": Packets received from other user: " + packetsReceivedCount);
+        System.out.println(this.name + ": Packets received from other user: " + packetsReceivedCount);
     }
 }
 
@@ -129,8 +128,6 @@ class Server {
         // split the string to get the client info
         String[] clientInfo = str.split(" ");
         String client = clientInfo[0];
-        // String destination = clientInfo[1];
-        // String message = clientInfo[2];
 
         // increment the number of packets recieved by the client
         if (client.equals("A")) {
@@ -146,12 +143,13 @@ class Server {
         if (r <= p) {
             if (client.equals("A")) {
                 packetsDroppedA++;
-            } else if (client.equals("B")){
+            } else if (client.equals("B")) {
                 packetsDroppedB++;
             }
-            //System.out.println("The packet from client " + client + " was dropped");// to be removed later
+            // System.out.println("The packet from client " + client + " was dropped");// to
+            // be removed later
         } else {
-            // if the random number is greater than p, the packet is delayed by a certain
+            // if the random number is greater than p, the packet is delayed by a random
             // amount of time between mindDelay and maxDelay
             long delay = (long) ((Math.random() * (maxDelay - minDelay + 1)) + minDelay);
 
@@ -163,20 +161,19 @@ class Server {
                 e.printStackTrace();
             }
 
-            // send the packet to the client
+            // keep track of the packets + delays
             if (client.equals("A")) {
                 packetDelayedA++; // increment the number of packets delayed by A
                 totalDelayA += delay; // add the delay to the total delay of A
             } else if (client.equals("B")) {
-                packetsRecievedB++; // increment the number of packets recieved by B
                 packetDelayedB++; // increment the number of packets delayed by B
                 totalDelayB += delay; // add the delay to the total delay of B
             }
 
-
-           // System.out.println("The packet from client " + client + " was delayed by " + delay + " ms."); // to be
-                                                                                                          // removed
-                                                                                                          // later
+            // System.out.println("The packet from client " + client + " was delayed by " +
+            // delay + " ms."); // to be
+            // removed
+            // later
         }
         try {
             String destinationClient = (client.equals("A") ? "B" : "A");
@@ -189,11 +186,14 @@ class Server {
     }
 
     public void getStats() {
-        System.out.println("Packets recieved from A: " + (packetsRecievedA-1) + " | " + "Lost: " + packetsDroppedA
-                + " | " + "Delayed: " + (packetDelayedA-1));
-        System.out.println("Packets recieved from B: " + (packetsRecievedA-1) + " | " + "Lost: " + (packetsDroppedB-1)
-                + " | " + "Delayed: " + packetDelayedB);
-        System.out.println("Average delay from A to B: " + String.format("%.2f", totalDelayA / packetDelayedA) + " ms.");
-        System.out.println("Average delay from B to A: " + String.format("%.2f", totalDelayB / packetDelayedB) + " ms.");
+        System.out.println("Packets recieved from A: " + (packetsRecievedA - 1) + " | " + "Lost: " + packetsDroppedA
+                + " | " + "Delayed: " + (packetDelayedA - 1));
+        System.out
+                .println("Packets recieved from B: " + (packetsRecievedB - 1) + " | " + "Lost: " + (packetsDroppedB - 1)
+                        + " | " + "Delayed: " + packetDelayedB);
+        System.out
+                .println("Average delay from A to B: " + String.format("%.2f", totalDelayA / packetDelayedA) + " ms.");
+        System.out
+                .println("Average delay from B to A: " + String.format("%.2f", totalDelayB / packetDelayedB) + " ms.");
     }
 }
