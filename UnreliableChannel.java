@@ -24,53 +24,59 @@ public class UnreliableChannel {
 
 // Path: Client.java
 class Client {
-    public String name;
-    public DatagramSocket socket;
-    private InetAddress serverAddress;
-    private int serverPort;
-    private int packetCount = 0;
-    private int packetsReceivedCount = 0;
+    public String name;// client identifier (A or B)
+    public DatagramSocket socket;// UDP socket for sending and receiving packets
+    private InetAddress serverAddress;// Server IP address
+    private int serverPort;// Server port number
+    private int packetCount = 0;// Number of packets sent
+    private int packetsReceivedCount = 0; // Number of packets received
 
+    // constructor to intialize client settings
     public Client(String name, String serverAddress, int serverPort) throws Exception {
         this.name = name;
-        this.socket = new DatagramSocket();
-        this.serverAddress = InetAddress.getByName(serverAddress);
-        this.serverPort = serverPort;
+        this.socket = new DatagramSocket(); // create the UDP socket
+        this.serverAddress = InetAddress.getByName(serverAddress);// resolving server address
+        this.serverPort = serverPort;// assigning server port
     }
 
+    // method to send packets to the server
     private void sendPacket(String message) throws IOException {
-        if (!message.equals("END")) {
-            String packetData = name + " " + (this.name.equals("A") ? "B" : "A") + " " + (packetCount%2 == 0 ? "0" : "1");
-            byte[] buffer = packetData.getBytes();
+        if (!message.equals("END")) { // if not the end signal, construct the packet data
+            String packetData = name + " " + (this.name.equals("A") ? "B" : "A") + " "
+                    + (packetCount % 2 == 0 ? "0" : "1");
+            byte[] buffer = packetData.getBytes();// convert string data to bytes
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length, serverAddress, serverPort);
-            socket.send(packet);
-            packetCount++;
+            socket.send(packet);// sending the packet through the socket
+            packetCount++;// increment the packet count
         } else {
+            // if the message is "END", send the end signal to the server
             byte[] buffer = message.getBytes();
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length, serverAddress, serverPort);
             socket.send(packet);
         }
     }
 
+    // method to receive packets from the server
     private void receivePacket() throws IOException {
-        byte[] buffer = new byte[65535];
-        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-        socket.receive(packet);
+        byte[] buffer = new byte[65535]; // buffer to store incoming data
+        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);// preparing packet for receiving
+        socket.receive(packet);// receiving the packet
 
         String message = new String(packet.getData(), 0, packet.getLength());
-        if (!message.equals("END")) {
+        if (!message.equals("END")) { // if not the end signal, incremet received packet count
             packetsReceivedCount++;
         }
     }
 
+    // run method to handle sending and receiving packets
     public void run(int n) throws Exception {
-        while (packetCount < n) {
-            sendPacket("Data");
-            receivePacket();
-            Thread.sleep(500);
+        while (packetCount < n) {// until the specified number of packets are sent
+            sendPacket("Data"); // sending packet
+            receivePacket();// receiving packet
+            Thread.sleep(500);// wait for half a second before the next packet
         }
 
-        sendPacket("END");
+        sendPacket("END");// send end signal after all packets are sent
         System.out.println(this.name + ": Packets received from other user: " + packetsReceivedCount);
     }
 }
