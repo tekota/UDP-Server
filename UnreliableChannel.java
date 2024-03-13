@@ -198,7 +198,7 @@ class Server {
         System.out.println("Packets recieved from A: " + packetsRecievedA + " | " + "Lost: " + packetsDroppedA
                 + " | " + "Delayed: " + packetDelayedA);
         System.out
-                .println("Packets recieved from B: " + packetsRecievedB + " | " + "Lost: " + (packetsDroppedB)
+                .println("Packets recieved from B: " + packetsRecievedB + " | " + "Lost: " + packetsDroppedB
                         + " | " + "Delayed: " + packetDelayedB);
         System.out
                 .println("Average delay from A to B: " + String.format("%.2f", totalDelayA / packetDelayedA) + " ms.");
