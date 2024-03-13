@@ -39,7 +39,7 @@ class Client {
     }
 
     private void sendPacket(String message) throws IOException {
-        if (message.equals("Data")) {
+        if (!(message.equals("END"))) {
             String packetData = name + " " + (this.name.equals("A") ? "B" : "A") + " " + packetCount;
             byte[] buffer = packetData.getBytes();
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length, serverAddress, serverPort);
@@ -67,6 +67,7 @@ class Client {
         while (packetCount < n) {
             sendPacket("Data");
             receivePacket();
+            Thread.sleep(500);
         }
 
         sendPacket("END");
@@ -138,7 +139,7 @@ class Server {
         // increment the number of packets recieved by the client
         if (client.equals("A")) {
             packetsRecievedA++;
-        } else {
+        } else if (client.equals("B")) {
             packetsRecievedB++;
         }
 
@@ -179,7 +180,9 @@ class Server {
 
             // System.out.println("The packet from client " + client + " was delayed by " +
             // delay + " ms.");
+
         }
+        // sending the packet to the destination client
         try {
             String destinationClient = (client.equals("A") ? "B" : "A");
             DatagramSocket destinationSocket = (destinationClient.equals("A") ? clientASocket : clientBSocket);
@@ -188,17 +191,18 @@ class Server {
             System.err.println("Error forwarding packet to destination client.");
             e.printStackTrace();
         }
+
     }
 
     public void getStats() {
         System.out.println("Packets recieved from A: " + packetsRecievedA + " | " + "Lost: " + packetsDroppedA
-                + " | " + "Delayed: " + (packetDelayedA - 1));
+                + " | " + "Delayed: " + packetDelayedA);
         System.out
                 .println("Packets recieved from B: " + packetsRecievedB + " | " + "Lost: " + (packetsDroppedB)
                         + " | " + "Delayed: " + packetDelayedB);
         System.out
                 .println("Average delay from A to B: " + String.format("%.2f", totalDelayA / packetDelayedA) + " ms.");
         System.out
-                .println("Average delay from B to A: " + String.format("%.2f", totalDelayB / packetDelayedB) + " ms.");
+                .print("Average delay from B to A: " + String.format("%.2f", totalDelayB / packetDelayedB) + " ms.");
     }
 }
