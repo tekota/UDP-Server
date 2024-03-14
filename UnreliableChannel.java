@@ -10,7 +10,7 @@ public class UnreliableChannel {
         Client A = new Client("A", "localhost", server.port);
         Client B = new Client("B", "localhost", server.port);
 
-        // Store client sockets for server
+        // store client sockets for server
         server.clientASocket = A.socket;
         server.clientBSocket = B.socket;
 
@@ -19,6 +19,7 @@ public class UnreliableChannel {
 
         A.run(1000);
         B.run(1000);
+        serverThread.join(); // ensures that the server thread finishes before the main thread
     }
 }
 
@@ -85,7 +86,7 @@ class Client {
 class Server {
 
     private double p; // probability of packet loss
-    private double minDelay, maxDelay;
+    private double minDelay, maxDelay; // minimum and maximum delay
     public int port;
 
     private int packetsRecievedA = 0;
