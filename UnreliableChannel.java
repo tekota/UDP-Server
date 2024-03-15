@@ -160,7 +160,7 @@ class Server {
             } else if (client.equals("B")) {
                 packetsDroppedB++;
             }
-            // System.out.println("The packet from client " + client + " was dropped");
+            // System.out.println("The packet from client " + client + " was dropped"); <-- uncomment to keep track of the dropped packets
 
             // if the random number is greater than p, the packet is delayed
         } else {
@@ -186,7 +186,7 @@ class Server {
             }
 
             // System.out.println("The packet from client " + client + " was delayed by " +
-            // delay + " ms.");
+            // delay + " ms.");  <-- uncomment to keep track of the delayed packets
 
         }
         // sending the packet to the destination client
